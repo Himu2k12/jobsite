@@ -34,11 +34,11 @@
                             </li>
                             @endif
                             @can('isApplicant')
-                            <li><a href="">Profile</a></li>
+                            <li><a href="{{url('profile')}}">Profile</a></li>
                             @endcan
                             @can('isCompany')
-                            <li><a href="">DashBoard</a></li>
-                            <li><a href="{{url('job-form')}}">Create Job</a></li>
+                            <li><a href="{{url('/doashboard')}}">DashBoard</a></li>
+                            <li><a href="{{url('job-form')}}"><span class="rounded bg-primary py-2 px-3 text-white"><span class="h5 mr-2">+</span> Post a Job</span></a></li>
                             @endcan
                             @if(Auth::check())
                                 <li> <a class="" href="{{ route('logout') }}"
@@ -53,8 +53,7 @@
                             @else
                                 <li><a href="{{url('login')}}">Login</a></li>
                                 @endif
-                            <li><a href="new-post.html"><span class="rounded bg-primary py-2 px-3 text-white"><span class="h5 mr-2">+</span> Post a Job</span></a></li>
-                        </ul>
+                             </ul>
                     </nav>
                 </div>
 

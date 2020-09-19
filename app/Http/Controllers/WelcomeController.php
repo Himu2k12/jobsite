@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CompanyInfo;
+use App\Job;
 use App\User;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\JsonResponse;
@@ -19,13 +20,14 @@ class WelcomeController extends Controller
         $this->user = $guard->user();
     }
     public function home(){
-        return view('FrontEnd.Home.home');
+        $today=date('Y-m-d');
+        $jobs=Job::whereDate('last_application_date','>=',$today)->simplePaginate(10);
+        return view('FrontEnd.Home.home',['jobs'=>$jobs]);
     }
     public function registerCompany(){
         if (Auth::check()) {
             return redirect('/');
         }
-
         return view('FrontEnd.Register.register-company');
     }
     public function saveCompany(Request $request){
@@ -56,11 +58,16 @@ class WelcomeController extends Controller
             $newfilename = round(microtime(true)) . '.' . end($temp);
             $imgUrlSlide = $directory . $newfilename;
             Image::make($logo)->resize(null, 530)->save($imgUrlSlide);
-
             $companyInfo->company_logo=$imgUrlSlide;
         }
        $companyInfo->save();
         Auth::loginUsingId($id);
        return redirect('login');
     }
+    public function Detailsjob($slug){
+        $jobinfo=Job::where('slug',$slug)->first();
+        $companyInfo=CompanyInfo::where('company_id',$jobinfo->company_id)->first();
+        return view('FrontEnd.Home.job-details',['jobinfo'=>$jobinfo,'companyInfo'=>$companyInfo]);
+    }
+
 }
